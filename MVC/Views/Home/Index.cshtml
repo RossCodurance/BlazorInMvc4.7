@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <h1>This is my MVC page</h1>
+</div>
+<div class="row">
+    <div id="test-component" data-header="Instance 1"></div>
+
+    <div id="test-component-2" data-header="Instance 2"></div>
+</div>
+<hr />
+
+<div id="dynamic-test" class="row">
+    <button onclick="generate()">Generate dynamic stuff</button>
+</div>
+
+<script src="_framework/blazor.webassembly.js"></script>
+<script>
+
+    window.loadTestComponent = async function () {
+        let containerElement = document.getElementById("test-component");
+        await Blazor.rootComponents.add(containerElement, 'TestComponent', { Header: containerElement.getAttribute("data-header") });
+
+
+        let containerElement2 = document.getElementById("test-component-2");
+        await Blazor.rootComponents.add(containerElement2, 'TestComponent', { Header: containerElement2.getAttribute("data-header") });
+    };
+
+    window.loadDynamicComponent = async function () {
+        let containerElement = document.getElementById("dynamic-component");
+        await Blazor.rootComponents.add(containerElement, 'TestComponent', { Header: containerElement.getAttribute("data-header") });
+    };
+
+    function generate() {
+        let componentContainer = document.createElement('div');
+        componentContainer.setAttribute("id", "dynamic-component");
+        componentContainer.setAttribute("data-header", "Dynamic Instance");
+
+        let loadButton = document.createElement("button");
+        loadButton.setAttribute("onclick", "loadDynamicComponent()");
+        loadButton.textContent = "Load Blazor Component";
+
+        document.getElementById('dynamic-test').appendChild(loadButton);
+        document.getElementById('dynamic-test').appendChild(componentContainer);
+    }
+</script>
